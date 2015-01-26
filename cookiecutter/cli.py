@@ -68,3 +68,7 @@ def main(template, no_input, checkout, verbose):
         )
 
     cookiecutter(template, checkout, no_input)
+
+
+if __name__ == "__main__":
+    main()
