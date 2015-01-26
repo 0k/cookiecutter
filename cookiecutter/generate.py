@@ -14,6 +14,7 @@ import json
 import logging
 import os
 import shutil
+import pprint
 
 from jinja2 import FileSystemLoader, Template
 from jinja2.environment import Environment
@@ -24,9 +25,10 @@ from .exceptions import NonTemplatedInputDirException
 from .find import find_template
 from .utils import make_sure_path_exists, work_in
 from .hooks import run_hook
+from .parsers import load_context_from_file
 
 
-def generate_context(context_file='cookiecutter.json', default_context=None,
+def generate_context(context_file, default_context=None,
                      extra_context=None):
     """
     Generates the context for a Cookiecutter project template.
@@ -40,15 +42,7 @@ def generate_context(context_file='cookiecutter.json', default_context=None,
 
     context = {}
 
-    file_handle = open(context_file)
-    try:
-        obj = json.load(file_handle, object_pairs_hook=OrderedDict)
-    except Exception, e:
-        logging.error(
-            "Error while parsing file %s:\n%s"
-            % (context_file,
-               "  " + str(e.message).replace("\n", "\n  ")))
-        exit(1)
+    obj = load_context_from_file(context_file)
 
     # Add the Python object to the context dictionary
     file_name = os.path.split(context_file)[1]
@@ -62,7 +56,7 @@ def generate_context(context_file='cookiecutter.json', default_context=None,
     if extra_context:
         obj.update(extra_context)
 
-    logging.debug('Context generated is {0}'.format(context))
+    logging.debug('Context generated is: %r', context)
     return context
 
 

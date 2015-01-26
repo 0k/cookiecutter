@@ -19,6 +19,8 @@ from .config import get_user_config
 from .prompt import prompt_for_config
 from .generate import generate_context, generate_files
 from .vcs import clone
+from .utils import work_in
+from .parsers import PARSERS
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +54,19 @@ def expand_abbreviations(template, config_dict):
     return template
 
 
+DEFAULT_CONFIG_BASE = 'cookiecutter'
+
+
+def find_cfg_file(repo_dir):
+    with work_in(repo_dir):
+        for ext, _ in PARSERS:
+            fname = "%s.%s" % (DEFAULT_CONFIG_BASE, ext)
+            if os.path.exists(fname):
+                logging.debug('Found %s.', fname)
+                return os.path.abspath(fname)
+    return False
+
+
 def cookiecutter(template, checkout=None, no_input=False, extra_context=None):
     """
     API equivalent to using Cookiecutter at the command line.
@@ -83,7 +98,8 @@ def cookiecutter(template, checkout=None, no_input=False, extra_context=None):
         # cookiecutters_dir
         repo_dir = template
 
-    context_file = os.path.join(repo_dir, 'cookiecutter.json')
+
+    context_file = find_cfg_file(repo_dir)
     logging.debug('context_file is {0}'.format(context_file))
 
     context = generate_context(
