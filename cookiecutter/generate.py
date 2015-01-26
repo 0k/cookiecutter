@@ -41,7 +41,14 @@ def generate_context(context_file='cookiecutter.json', default_context=None,
     context = {}
 
     file_handle = open(context_file)
-    obj = json.load(file_handle, object_pairs_hook=OrderedDict)
+    try:
+        obj = json.load(file_handle, object_pairs_hook=OrderedDict)
+    except Exception, e:
+        logging.error(
+            "Error while parsing file %s:\n%s"
+            % (context_file,
+               "  " + str(e.message).replace("\n", "\n  ")))
+        exit(1)
 
     # Add the Python object to the context dictionary
     file_name = os.path.split(context_file)[1]
