@@ -20,8 +20,15 @@ def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
     return yaml.load(stream, OrderedLoader)
 
 
+def load_from_yaml(f):
+    obj = ordered_load(f, yaml.SafeLoader)
+    if "context" in obj and isinstance(obj["context"], dict):
+        return {"__meta__": obj["context"]}
+    return obj
+
+
 PARSERS = [
-    ('yml', lambda f: ordered_load(f, yaml.SafeLoader)),
+    ('yml', load_from_yaml),
     ('json', lambda f: json.load(f, object_pairs_hook=OrderedDict)),
 ]
 

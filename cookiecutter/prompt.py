@@ -9,13 +9,49 @@ Functions for prompting the user for project info.
 """
 
 from __future__ import unicode_literals
+from __future__ import print_function
+
 import sys
+import re
 
 from .compat import iteritems, read_response, is_string
 from jinja2.environment import Environment
 
 
-def prompt_for_config(context, no_input=False):
+def prompt_field(field, help_txt, regex=None, default=None, optional=False):
+    """Prompt for value of one field"""
+
+    if default is not None:
+        prompt = '{0} (default is "{1}")? '.format(help_txt, default)
+    elif optional:
+        prompt = '{0} (optional) ? '.format(help_txt)
+    else:
+        prompt = '{0} ? '.format(help_txt)
+
+    try:
+        reg = re.compile('^%s$' % regex) if regex else None
+    except Exception, e:
+        print("Invalid regex for field %s: %s\n%s"
+              % (field, regex, e.message))
+        exit(1)
+
+    while True:
+        ans = read_response(prompt).strip()
+        if ans == '':
+            if optional:
+                return None
+            if default is not None:
+                ans = default
+        if not reg:
+            return ans
+        if reg.search(ans):
+            return ans
+
+        print("Bad value. Please try to match %r..."
+              % regex)
+
+
+def prompt_for_config(context, no_input=False, use_defaults=False):
     """
     Prompts the user to enter new config, using context as a source for the
     field names and sample values.
@@ -25,19 +61,33 @@ def prompt_for_config(context, no_input=False):
     cookiecutter_dict = {}
     env = Environment()
 
-    for key, raw in iteritems(context['cookiecutter']):
-        raw = raw if is_string(raw) else str(raw)
-        val = env.from_string(raw).render(cookiecutter=cookiecutter_dict)
+    def render(s):
+        return env.from_string(s).render(
+            cookiecutter=cookiecutter_dict,
+            cc=cookiecutter_dict)
 
-        if not no_input:
-            prompt = '{0} (default is "{1}")? '.format(key, val)
+    meta = context.get('__meta__', {})
+    keys = meta.keys() if meta else context.keys()
+    for key in keys:
+        dsc = meta.get(key, None)
+        raw = context.get(key, None)
+        if raw is not None:
+            raw = raw if is_string(raw) else str(raw)
+        else:
+            raw = meta.get("default", None)
+        default = render(raw) if raw is not None else None
 
-            new_val = read_response(prompt).strip()
+        if no_input or (use_defaults and default is not None):
+            value = default
+        else:
+            value = prompt_field(
+                field=key,
+                help_txt=render(dsc["help"]) if dsc and "help"in dsc else key,
+                default=default,
+                optional=dsc and "default" in dsc and dsc["default"] is None,
+                regex=dsc["regex"] if "regex" in dsc else None)
 
-            if new_val != '':
-                val = new_val
-
-        cookiecutter_dict[key] = val
+        cookiecutter_dict[key] = value
     return cookiecutter_dict
 
 
