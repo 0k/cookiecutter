@@ -86,6 +86,11 @@ def cookiecutter(template, checkout=None, no_input=False, extra_context=None):
 
     context_file = find_cfg_file(repo_dir)
 
+    if not context_file:
+        raise SyntaxError(
+            "No configuration file was found in %r"
+            % (repo_dir, ))
+
     logging.debug('context_file is {0}'.format(context_file))
 
     context = generate_context(
