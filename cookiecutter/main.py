@@ -96,7 +96,7 @@ def cookiecutter(template, checkout=None, no_input=False, extra_context=None):
 
     # prompt the user to manually configure at the command line.
     # except when 'no-input' flag is set
-    context['cookiecutter'] = prompt_for_config(context, no_input)
+    context = prompt_for_config(context, no_input)
 
     # Create project from local context and project template.
     generate_files(

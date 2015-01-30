@@ -59,21 +59,14 @@ def generate_context(context_file='cookiecutter.json', default_context=None,
     :param extra_context: Dictionary containing configuration overrides
     """
 
-    context = {}
-
-    obj = load_context_from_file(context_file)
-
-    # Add the Python object to the context dictionary
-    file_name = os.path.split(context_file)[1]
-    file_stem = file_name.split('.')[0]
-    context[file_stem] = obj
+    context = load_context_from_file(context_file)
 
     # Overwrite context variable defaults with the default context from the
     # user's global config, if available
     if default_context:
-        obj.update(default_context)
+        context.update(default_context)
     if extra_context:
-        obj.update(extra_context)
+        context.update(extra_context)
 
     logging.debug('Context generated is {0}'.format(context))
     return context
@@ -182,6 +175,8 @@ def generate_files(repo_dir, context=None, output_dir='.'):
 
     unrendered_dir = os.path.split(template_dir)[1]
     ensure_dir_is_templated(unrendered_dir)
+    if 'cookiecutter' not in context:
+        context['cookiecutter'] = context  # compatibility
     project_dir = render_and_create_dir(unrendered_dir, context, output_dir)
 
     # We want the Jinja path and the OS paths to match. Consequently, we'll:

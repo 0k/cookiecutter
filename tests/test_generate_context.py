@@ -26,7 +26,7 @@ def context_data():
             'context_file': 'tests/test-generate-context/test.json'
         },
         {
-            'test': {'1': 2, 'some_key': 'some_val'}
+            '1': 2, 'some_key': 'some_val'
         }
     )
 
@@ -35,7 +35,7 @@ def context_data():
             'context_file': 'tests/test-generate-context/test.yml'
         },
         {
-            'test': {'1': 2, 'some_key': 'some_val'}
+            '1': 2, 'some_key': 'some_val'
         }
     )
 
@@ -45,7 +45,7 @@ def context_data():
             'default_context': {'1': 3}
         },
         {
-            'test': {'1': 3, 'some_key': 'some_val'}
+            '1': 3, 'some_key': 'some_val'
         }
     )
 
@@ -55,7 +55,7 @@ def context_data():
             'extra_context': {'1': 4},
         },
         {
-            'test': {'1': 4, 'some_key': 'some_val'}
+            '1': 4, 'some_key': 'some_val'
         }
     )
 
@@ -66,7 +66,7 @@ def context_data():
             'extra_context': {'1': 5},
         },
         {
-            'test': {'1': 5, 'some_key': 'some_val'}
+            '1': 5, 'some_key': 'some_val'
         }
     )
 

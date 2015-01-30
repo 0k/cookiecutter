@@ -22,14 +22,17 @@ def prompt_for_config(context, no_input=False):
 
     :param no_input: Prompt the user at command line for manual configuration?
     """
+
+    if "cookiecutter" in context:
+        context = context["cookiecutter"]
+
     cookiecutter_dict = {}
     env = Environment()
 
-    for key, raw in iteritems(context['cookiecutter']):
+    for key, raw in iteritems(context):
         if key.startswith('_'):
             cookiecutter_dict[key] = raw
             continue
-
         raw = raw if is_string(raw) else str(raw)
         val = env.from_string(raw).render(cookiecutter=cookiecutter_dict)
 
