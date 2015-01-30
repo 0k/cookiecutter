@@ -2,27 +2,40 @@
 Cookiecutter
 =============
 
+
 .. image:: https://badge.fury.io/py/cookiecutter.png
     :target: http://badge.fury.io/py/cookiecutter
 
-.. image:: https://travis-ci.org/audreyr/cookiecutter.png?branch=master
-        :target: https://travis-ci.org/audreyr/cookiecutter
+.. image:: https://travis-ci.org/0k/cookiecutter.png?branch=master
+        :target: https://travis-ci.org/0k/cookiecutter
 
 .. image:: https://ci.appveyor.com/api/projects/status/github/audreyr/cookiecutter?branch=master
-        :target: https://ci.appveyor.com/project/audreyr/cookiecutter/branch/master
+        :target: https://ci.appveyor.com/project/0k/cookiecutter/branch/master
 
 .. image:: https://pypip.in/d/cookiecutter/badge.png
         :target: https://crate.io/packages/cookiecutter?version=latest
 
-.. image:: https://codecov.io/github/audreyr/cookiecutter/coverage.svg?branch=master
-        :target: https://codecov.io/github/audreyr/cookiecutter?branch=master
+.. image:: https://codecov.io/github/0k/cookiecutter/coverage.svg?branch=master
+        :target: https://codecov.io/github/0k/cookiecutter?branch=master
 
-.. image:: https://badges.gitter.im/Join Chat.svg
-        :target: https://gitter.im/audreyr/cookiecutter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
-.. image:: https://readthedocs.org/projects/cookiecutter/badge/?version=latest
-        :target: https://readthedocs.org/projects/cookiecutter/?badge=latest
-        :alt: Documentation Status
+Warning
+-------
+
+This is not the official cookiecutter package, but a fork. It should
+remain compatible although with original ``cookiecutter`` as of
+2015-01-30.
+
+Here's how to install this fork::
+
+    pip install git+https://github.com/0k/cookiecutter
+
+What follows is the original README.
+
+
+Description
+-----------
+
 
 A command-line utility that creates projects from **cookiecutters** (project
 templates), e.g. creating a Python package project from a Python package project template.
